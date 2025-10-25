@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title th:text="${status} + ' • Erro'">Erro</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Helvetica, Arial; margin: 2rem; }
+    .card { border: 1px solid #e5e7eb; border-radius: .5rem; padding: 1rem 1.25rem; max-width: 800px; }
+    h1 { margin: 0 0 .25rem 0; }
+    .meta { color: #6b7280; font-size: .95rem; margin-bottom: .75rem; }
+    pre { background: #f9fafb; padding: .75rem; border-radius: .375rem; overflow-x: auto; }
+    a.button { display: inline-block; margin-top: .75rem; padding: .5rem .75rem; background: #2563eb; color: #fff; border-radius: .375rem; text-decoration: none; }
+  </style>
+  <!-- Página genérica de erros para evitar Whitelabel -->
+  <!-- Dica: em produção, mantenha mensagens genéricas e registre detalhes no servidor. -->
+  <!-- Para ver detalhes técnicos em dev, adicione ?trace=true à URL. -->
+</head>
+<body>
+  <div class="card">
+    <h1 th:text="${error}">Ocorreu um erro</h1>
+    <div class="meta">
+      <span th:text="'Código: ' + ${status}">Código: 500</span>
+      <span> • </span>
+      <span th:text="${path}">/</span>
+      <span> • </span>
+      <span th:text="${timestamp}">timestamp</span>
+    </div>
+
+    <p th:if="${message}" th:text="${message}">Mensagem de erro</p>
+
+    <div th:if="${trace}">
+      <details open>
+        <summary>Detalhes técnicos</summary>
+        <pre th:text="${trace}"></pre>
+      </details>
+    </div>
+
+    <a class="button" href="/">Voltar para a página inicial</a>
+  </div>
+</body>
+  
+</html>

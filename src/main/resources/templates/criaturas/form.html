@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Criaturas • Formulário</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; margin: 2rem; }
+    form { max-width: 640px; display: grid; gap: 1rem; }
+    label { font-weight: 600; }
+    input, select, textarea { padding: .5rem; border: 1px solid #ddd; border-radius: .375rem; width: 100%; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .actions { display: flex; gap: .5rem; }
+    button, a.button { padding: .5rem .75rem; border: 0; border-radius: .375rem; background: #2563eb; color: white; text-decoration: none; cursor: pointer; }
+    a.button.secondary { background: #6b7280; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Nova / Editar Criatura</h1>
+    <p>Protótipo de formulário</p>
+  </header>
+
+  <main>
+    <form th:action="@{/criaturas}" th:object="${criatura}" method="post">
+      <input type="hidden" th:field="*{id}" />
+      <div class="row">
+        <div>
+          <label for="nome">Nome</label>
+          <input id="nome" name="nome" th:field="*{nome}" placeholder="Ex.: Goblin" />
+        </div>
+        <div>
+          <label for="tipo">Tipo</label>
+          <input id="tipo" name="tipo" th:field="*{tipo}" placeholder="Ex.: Fada" />
+        </div>
+      </div>
+
+      <div>
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" name="descricao" th:field="*{descricao}" rows="4" placeholder="Breve descrição..."></textarea>
+      </div>
+
+      <div class="actions">
+        <button type="submit">Salvar</button>
+        <a class="button secondary" th:href="@{/criaturas}">Cancelar</a>
+      </div>
+    </form>
+  </main>
+</body>
+</html>

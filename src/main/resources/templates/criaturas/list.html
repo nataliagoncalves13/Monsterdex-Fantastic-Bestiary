@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Criaturas • Lista</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; margin: 2rem; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    th { background: #f5f5f5; text-align: left; }
+    a.button { display: inline-block; padding: .5rem .75rem; background: #2563eb; color: white; border-radius: .375rem; text-decoration: none; }
+    .actions a { margin-right: .5rem; }
+    .link-like { background: none; border: none; color: #dc2626; text-decoration: underline; cursor: pointer; padding: 0; font: inherit; }
+    .alert { padding: .75rem 1rem; border-radius: .375rem; margin-bottom: 1rem; }
+    .alert.success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Lista de Criaturas</h1>
+    <p>Protótipo de listagem</p>
+    <div th:if="${msg}" class="alert success" th:text="${msg}">Mensagem</div>
+    <p>
+      <a class="button" th:href="@{/criaturas/novo}">Nova Criatura</a>
+    </p>
+  </header>
+
+  <main>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Tipo</th>
+          <th class="actions">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="c : ${criaturas}">
+          <td th:text="${c.id}">1</td>
+          <td th:text="${c.nome}">Goblin</td>
+          <td th:text="${c.tipo}">Fada</td>
+          <td class="actions">
+            <a th:href="@{/criaturas/{id}/editar(id=${c.id})}">Editar</a>
+            <form th:action="@{/criaturas/{id}/remover(id=${c.id})}" method="post" style="display:inline" onsubmit="return confirm('Remover esta criatura?');">
+              <button type="submit" class="link-like">Remover</button>
+            </form>
+          </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(criaturas)}">
+          <td colspan="4">Nenhuma criatura cadastrada.</td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>
