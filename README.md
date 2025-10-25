@@ -1,5 +1,6 @@
 # MonsterDex - Bestiário Fantástico
 Grupo: Natalia Gonçalves, Isabela Azevedo, Leonardo Trindade
+
 Datas importantes:
 - Repositório com membros: 18/10/2025
 - Scaffold: 25/10/2025
