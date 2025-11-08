@@ -1,6 +1,18 @@
 package com.monsterdex.monsterdex.model;
 
-import jakarta.persistence.*;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -26,6 +38,13 @@ public class Criatura {
     @Column(length = 2000)
     private String descricao;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", nullable = false) // Chave estrangeira
+    private Usuario usuario;
+
+    @OneToMany(mappedBy = "criatura", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EntradaDiario> entradasDiario;
+
     public Criatura() {}
 
     public Criatura(Long id, String nome, String tipo, String descricao) {
@@ -46,4 +65,11 @@ public class Criatura {
 
     public String getDescricao() { return descricao; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
+    
+    public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
+
+    public List<EntradaDiario> getEntradasDiario() { return entradasDiario; }
+    public void setEntradasDiario(List<EntradaDiario> entradasDiario) { this.entradasDiario = entradasDiario; }
+
 }

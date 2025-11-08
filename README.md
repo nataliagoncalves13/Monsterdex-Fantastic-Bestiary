@@ -18,5 +18,5 @@ Branches:
 - backend (backend separado do front e totalmente focado na funcionalidade do código)
 - frontend (frontend separado do back e totalmente focado no design das páginas)
 
-ps: O README será alterado para uma versão final na entrega final em 25/11 após conclusão de todas as datas anteriores.
+ps: O README será alterado para uma versão final na entrega final em 29/11 após conclusão de todas as datas anteriores.
 
