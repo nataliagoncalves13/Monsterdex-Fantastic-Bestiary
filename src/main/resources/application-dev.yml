@@ -7,26 +7,22 @@ server:
     include-binding-errors: always
     include-stacktrace: on_param
 
-spring:
-  application:
-    name: monsterdex
   datasource:
-    url: jdbc:h2:mem:monsterdex;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: 
+    url: jdbc:postgresql://localhost:5432/monsterdex_db
+    username: postgres
+    password: 123456
+  
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
     properties:
       "[hibernate.format_sql]": true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
   h2:
     console:
-      enabled: true
-      path: /h2-console
-  thymeleaf:
-    cache: false
+      enabled: false
 
 # Segurança (dev): autenticação desativada por configuração Java (SecurityFilterChain)
 # Futuro: reativar autenticação e remover a liberação geral.
