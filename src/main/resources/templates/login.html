@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Monsterdex - Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4" style="margin-top: 10vh;">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h3 class="card-title text-center mb-4">Login - Monsterdex</h3>
+                        
+                        <form th:action="@{/login}" method="post">
+                            
+                            <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                                Usuário ou senha inválidos.
+                            </div>
+                            
+                            <div th:if="${param.logout}" class="alert alert-success" role="alert">
+                                Você foi desconectado com sucesso.
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Usuário (Username)</label>
+                                <input type="text" class="form-control" id="username" name="username" required autofocus>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Senha</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Entrar</button>
+                            </div>
+                        </form>
+                        
+                        <hr>
+                        
+                        <div class="text-center">
+                            <p>Não tem uma conta?</p>
+                            <a th:href="@{/usuarios/cadastro}" class="btn btn-outline-secondary w-100">Cadastre-se aqui</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
