@@ -3,50 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <title>Monsterdex - Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monsterdex - Acesso ao Bestiário</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;700&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #111827; color: #f3f4f6; }
+        .font-title { font-family: 'Cinzel', serif; }
+    </style>
 </head>
-<body class="bg-light">
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-4">
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-4" style="margin-top: 10vh;">
-                <div class="card shadow-sm">
-                    <div class="card-body p-4">
-                        <h3 class="card-title text-center mb-4">Login - Monsterdex</h3>
-                        
-                        <form th:action="@{/login}" method="post">
-                            
-                            <div th:if="${param.error}" class="alert alert-danger" role="alert">
-                                Usuário ou senha inválidos.
-                            </div>
-                            
-                            <div th:if="${param.logout}" class="alert alert-success" role="alert">
-                                Você foi desconectado com sucesso.
-                            </div>
+    <div class="w-full max-w-md bg-gray-800 border border-gray-700 rounded-xl shadow-2xl overflow-hidden transform transition duration-500 hover:shadow-yellow-900/20">
+        
+        <div class="p-8">
+            <div class="text-center mb-8">
+                <h3 class="text-3xl font-bold font-title text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 mb-2">
+                    Monsterdex
+                </h3>
+                <p class="text-gray-400 text-sm">Identifique-se, viajante.</p>
+            </div>
 
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Usuário (Username)</label>
-                                <input type="text" class="form-control" id="username" name="username" required autofocus>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Senha</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                            </div>
-                            
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Entrar</button>
-                            </div>
-                        </form>
-                        
-                        <hr>
-                        
-                        <div class="text-center">
-                            <p>Não tem uma conta?</p>
-                            <a th:href="@{/usuarios/cadastro}" class="btn btn-outline-secondary w-100">Cadastre-se aqui</a>
+            <form th:action="@{/login}" method="post" class="space-y-6">
+                
+                <div th:if="${param.error}" class="bg-red-900/30 border border-red-500/50 text-red-200 px-4 py-3 rounded-lg text-sm flex items-center gap-2" role="alert">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>Credenciais inválidas. O portão permanece fechado.</span>
+                </div>
+                
+                <div th:if="${param.logout}" class="bg-green-900/30 border border-green-500/50 text-green-200 px-4 py-3 rounded-lg text-sm flex items-center gap-2" role="alert">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <span>Você retornou ao acampamento em segurança.</span>
+                </div>
+
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-400 mb-2">Usuário (Username)</label>
+                    <div class="relative">
+                        <input type="text" id="username" name="username" required autofocus 
+                               class="w-full bg-gray-900 border border-gray-600 text-white rounded-lg p-3 pl-10 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200 placeholder-gray-600">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
                         </div>
                     </div>
                 </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-400 mb-2">Senha Secreta</label>
+                    <div class="relative">
+                        <input type="password" id="password" name="password" required
+                               class="w-full bg-gray-900 border border-gray-600 text-white rounded-lg p-3 pl-10 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition duration-200 placeholder-gray-600">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="w-full bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white font-bold py-3 px-4 rounded-lg shadow-lg transform transition hover:scale-[1.02] focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-yellow-500">
+                    Abrir o Grimório
+                </button>
+            </form>
+
+            <div class="relative my-8">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-700"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-2 bg-gray-800 text-gray-500">Ainda não possui acesso?</span>
+                </div>
+            </div>
+
+            <div class="text-center relative z-10">
+                <a th:href="@{/usuarios/cadastro}" class="block w-full border border-gray-600 hover:bg-gray-700 text-gray-300 hover:text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 cursor-pointer">
+                    Inscrever-se na Guilda
+                </a>
             </div>
         </div>
     </div>

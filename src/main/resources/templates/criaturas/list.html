@@ -2,57 +2,90 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Criaturas • Lista</title>
-  <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; margin: 2rem; }
-    table { border-collapse: collapse; width: 100%; }
-    th, td { border: 1px solid #ddd; padding: 8px; }
-    th { background: #f5f5f5; text-align: left; }
-    a.button { display: inline-block; padding: .5rem .75rem; background: #2563eb; color: white; border-radius: .375rem; text-decoration: none; }
-    .actions a { margin-right: .5rem; }
-    .link-like { background: none; border: none; color: #dc2626; text-decoration: underline; cursor: pointer; padding: 0; font: inherit; }
-    .alert { padding: .75rem 1rem; border-radius: .375rem; margin-bottom: 1rem; }
-    .alert.success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Lista de Criaturas</h1>
-    <p>Protótipo de listagem</p>
-    <div th:if="${msg}" class="alert success" th:text="${msg}">Mensagem</div>
-    <p>
-      <a class="button" th:href="@{/criaturas/novo}">Nova Criatura</a>
-    </p>
-  </header>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monsterdex - Lista de Criaturas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-  <main>
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nome</th>
-          <th>Tipo</th>
-          <th class="actions">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="c : ${criaturas}">
-          <td th:text="${c.id}">1</td>
-          <td th:text="${c.nome}">Goblin</td>
-          <td th:text="${c.tipo}">Fada</td>
-          <td class="actions">
-            <a th:href="@{/criaturas/{id}/editar(id=${c.id})}">Editar</a>
-            <form th:action="@{/criaturas/{id}/remover(id=${c.id})}" method="post" style="display:inline" onsubmit="return confirm('Remover esta criatura?');">
-              <button type="submit" class="link-like">Remover</button>
-            </form>
-          </td>
-        </tr>
-        <tr th:if="${#lists.isEmpty(criaturas)}">
-          <td colspan="4">Nenhuma criatura cadastrada.</td>
-        </tr>
-      </tbody>
-    </table>
-  </main>
+    <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;700&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #111827; color: #f3f4f6; }
+        .font-title { font-family: 'Cinzel', serif; }
+        
+    </style>
+</head>
+<body class="p-8">
+
+    <div class="container mx-auto max-w-7xl">
+        
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold font-title text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 mb-2">
+                Lista de Criaturas
+            </h1>
+            <p class="text-gray-400 font-title border-b border-gray-700 pb-4 inline-block">
+                Gerenciamento do Bestiário
+            </p>
+        </header>
+
+        <div th:if="${msg}" class="mb-6 bg-green-900/50 border border-green-500 text-green-200 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Sucesso!</strong>
+            <span class="block sm:inline" th:text="${msg}"></span>
+        </div>
+
+        <div class="flex justify-end mb-6">
+            <a th:href="@{/criaturas/novo}" class="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white font-bold py-2 px-6 rounded-lg shadow-lg transform transition hover:scale-105">
+                + Nova Criatura
+            </a>
+        </div>
+
+        <div class="overflow-x-auto shadow-md sm:rounded-lg border border-gray-700">
+            <table class="w-full text-left text-gray-300">
+                <thead class="bg-gray-800 text-yellow-400 font-title uppercase text-sm tracking-wider">
+                    <tr>
+                        <th class="px-6 py-4 border-b border-gray-700">ID</th>
+                        <th class="px-6 py-4 border-b border-gray-700">Nome</th>
+                        <th class="px-6 py-4 border-b border-gray-700">Tipo</th>
+                        <th class="px-6 py-4 border-b border-gray-700 text-right">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-700 bg-gray-900">
+                    <tr th:each="c : ${criaturas}" class="hover:bg-gray-800 transition duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-400 font-mono text-sm" th:text="${c.id}">1</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold text-white" th:text="${c.nome}">Goblin</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-700 text-yellow-300 border border-yellow-600/30" th:text="${c.tipo}">
+                                Fada
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
+                            <a th:href="@{/criaturas/{id}/editar(id=${c.id})}" class="text-yellow-500 hover:text-yellow-300 transition-colors">
+                                Editar
+                            </a>
+                            
+                            <form th:action="@{/criaturas/{id}/remover(id=${c.id})}" method="post" class="inline-block" onsubmit="return confirm('Tem certeza que deseja banir esta criatura do reino?');">
+                                <button type="submit" class="text-red-500 hover:text-red-400 underline decoration-red-500/30 hover:decoration-red-400 cursor-pointer bg-transparent border-none">
+                                    Remover
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(criaturas)}">
+                        <td colspan="4" class="px-6 py-10 text-center text-gray-500 italic">
+                            Nenhuma criatura encontrada neste grimório.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="mt-8 text-center">
+            <a href="/" class="text-gray-500 hover:text-yellow-500 text-sm transition-colors">
+                ← Voltar ao Menu Principal
+            </a>
+        </div>
+
+    </div>
 </body>
 </html>

@@ -3,20 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>404 • Não encontrado</title>
-  <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Helvetica, Arial; margin: 2rem; }
-    .card { border: 1px solid #e5e7eb; border-radius: .5rem; padding: 1rem 1.25rem; max-width: 800px; }
-    h1 { margin: 0 0 .25rem 0; }
-    p { color: #6b7280; }
-    a.button { display: inline-block; margin-top: .75rem; padding: .5rem .75rem; background: #2563eb; color: #fff; border-radius: .375rem; text-decoration: none; }
-  </style>
+  <title>404 • Perdido na Masmorra</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;700&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #111827; color: #f3f4f6; }
+        .font-title { font-family: 'Cinzel', serif; }
+    </style>
 </head>
-<body>
-  <div class="card">
-    <h1>Página não encontrada</h1>
-    <p>A rota solicitada não existe ou o recurso foi removido.</p>
-    <a class="button" href="/">Ir para a inicial</a>
-  </div>
+<body class="bg-gray-900 h-screen flex items-center justify-center p-4">
+
+    <div class="max-w-lg w-full bg-gray-800 border border-gray-700 rounded-xl shadow-2xl p-8 text-center transform transition hover:scale-105 duration-300">
+        
+        <h1 class="text-9xl font-bold font-title text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 mb-2">
+            404
+        </h1>
+        
+        <h2 class="text-2xl text-white font-bold font-title mb-4">
+            Página não encontrada
+        </h2>
+        
+        <p class="text-gray-400 mb-8 leading-relaxed">
+            Parece que você se aventurou longe demais. A rota solicitada não existe ou o recurso foi banido deste plano de existência.
+        </p>
+        
+        <a href="/" class="inline-block bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-200">
+            Voltar para o Início
+        </a>
+
+    </div>
+
 </body>
 </html>

@@ -44,19 +44,10 @@ public class UsuarioController {
         
         service.salvar(usuario);
         ra.addFlashAttribute("msg", "Usuário cadastrado com sucesso! (Senha ainda não criptografada!)");
-        return "redirect:/usuarios/login"; 
+        return "redirect:/login";
+
     }
     
-
-    @GetMapping("/login")
-    public String mostrarFormularioLogin(Model model, @RequestParam(required = false) String error, RedirectAttributes ra) {
-        if (error != null) {
-            model.addAttribute("msg", "Erro no Login: Usuário ou senha incorretos.");
-        }
- 
-        return "usuarios/login"; 
-    }
-
     @PostMapping("/{id}/remover")
     public String remover(@PathVariable Long id, RedirectAttributes ra) {
         service.remover(id);

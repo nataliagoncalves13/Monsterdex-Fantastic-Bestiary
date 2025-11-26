@@ -3,41 +3,75 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title th:text="${status} + ' • Erro'">Erro</title>
-  <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Helvetica, Arial; margin: 2rem; }
-    .card { border: 1px solid #e5e7eb; border-radius: .5rem; padding: 1rem 1.25rem; max-width: 800px; }
-    h1 { margin: 0 0 .25rem 0; }
-    .meta { color: #6b7280; font-size: .95rem; margin-bottom: .75rem; }
-    pre { background: #f9fafb; padding: .75rem; border-radius: .375rem; overflow-x: auto; }
-    a.button { display: inline-block; margin-top: .75rem; padding: .5rem .75rem; background: #2563eb; color: #fff; border-radius: .375rem; text-decoration: none; }
-  </style>
-  <!-- Página genérica de erros para evitar Whitelabel -->
-  <!-- Dica: em produção, mantenha mensagens genéricas e registre detalhes no servidor. -->
-  <!-- Para ver detalhes técnicos em dev, adicione ?trace=true à URL. -->
+ <title th:text="${status} + ' • Falha no Sistema'">Erro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;700&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #111827; color: #f3f4f6; }
+        .font-title { font-family: 'Cinzel', serif; }
+        
+        pre::-webkit-scrollbar { height: 8px; background-color: #1f2937; }
+        pre::-webkit-scrollbar-thumb { background-color: #4b5563; border-radius: 4px; }
+    </style>
 </head>
-<body>
-  <div class="card">
-    <h1 th:text="${error}">Ocorreu um erro</h1>
-    <div class="meta">
-      <span th:text="'Código: ' + ${status}">Código: 500</span>
-      <span> • </span>
-      <span th:text="${path}">/</span>
-      <span> • </span>
-      <span th:text="${timestamp}">timestamp</span>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-4">
+
+    <div class="max-w-3xl w-full bg-gray-800 border border-gray-700 rounded-xl shadow-2xl overflow-hidden">
+        
+        <div class="p-8 text-center border-b border-gray-700">
+            <h1 class="text-6xl font-bold font-title text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 mb-2" 
+                th:text="${status}">
+                500
+            </h1>
+            
+            <h2 class="text-2xl text-white font-bold font-title mb-4" th:text="${error}">
+                Ocorreu um erro inesperado
+            </h2>
+
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-2 text-sm text-gray-500 font-mono bg-gray-900/50 p-3 rounded-lg border border-gray-700 inline-block">
+                <div>
+                    <span class="font-bold text-gray-400">Rota:</span>
+                    <span th:text="${path}">/caminho/do/erro</span>
+                </div>
+                <span class="hidden sm:block text-gray-600">•</span>
+                <div>
+                    <span class="font-bold text-gray-400">Horário:</span>
+                    <span th:text="${timestamp}">Timestamp</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-8 space-y-6">
+            
+            <div th:if="${message}" class="bg-red-900/20 border border-red-500/30 text-red-200 p-4 rounded-lg flex items-start gap-3">
+                <svg class="w-6 h-6 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                <div>
+                    <strong class="block font-bold mb-1 text-red-400">Mensagem do Sistema:</strong>
+                    <p th:text="${message}">Descrição do erro aqui.</p>
+                </div>
+            </div>
+
+            <div th:if="${trace}">
+                <details class="group bg-black rounded-lg border border-gray-700 overflow-hidden">
+                    <summary class="cursor-pointer p-4 font-mono text-sm text-yellow-500 font-bold hover:bg-gray-900 transition-colors flex justify-between items-center select-none">
+                        <span>> EXIBIR LOG TÉCNICO (STACK TRACE)</span>
+                        <span class="transform group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div class="border-t border-gray-800">
+                        <pre class="p-4 text-xs text-red-300 font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed" th:text="${trace}"></pre>
+                    </div>
+                </details>
+            </div>
+
+            <div class="text-center pt-4">
+                <a href="/" class="inline-block bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition hover:scale-105">
+                    Reiniciar Sistema (Voltar ao Início)
+                </a>
+            </div>
+
+        </div>
     </div>
 
-    <p th:if="${message}" th:text="${message}">Mensagem de erro</p>
-
-    <div th:if="${trace}">
-      <details open>
-        <summary>Detalhes técnicos</summary>
-        <pre th:text="${trace}"></pre>
-      </details>
-    </div>
-
-    <a class="button" href="/">Voltar para a página inicial</a>
-  </div>
 </body>
-  
 </html>

@@ -1,5 +1,9 @@
 package com.monsterdex.monsterdex.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -27,6 +31,12 @@ public class Usuario {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "usuario_roles", joinColumns = @JoinColumn(name = "usuario_id"))
+    @Column(name = "role")
+    private Set<String> roles = new HashSet<>();
+
+
 
     public Usuario() {}
 
@@ -49,5 +59,11 @@ public class Usuario {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    
+    public Set<String> getRoles() {
+    return roles;}
+
+    public void setRoles(Set<String> roles) {
+    this.roles = roles; }
+
+
 }
