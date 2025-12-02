@@ -34,7 +34,7 @@
         </div>
 
         <div class="flex justify-end mb-6">
-            <a th:href="@{/criaturas/novo}" class="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white font-bold py-2 px-6 rounded-lg shadow-lg transform transition hover:scale-105">
+            <a th:href="@{/criaturas/novo}" class="relative z-20 cursor-pointer bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white font-bold py-2 px-6 rounded-lg shadow-lg transform transition hover:scale-105">
                 + Nova Criatura
             </a>
         </div>
@@ -59,12 +59,12 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
-                            <a th:href="@{/criaturas/{id}/editar(id=${c.id})}" class="text-yellow-500 hover:text-yellow-300 transition-colors">
+                            <a th:href="@{/criaturas/{id}/editar(id=${c.id})}" class="relative z-20 cursor-pointer text-yellow-500 hover:text-yellow-300 transition-colors">
                                 Editar
                             </a>
                             
                             <form th:action="@{/criaturas/{id}/remover(id=${c.id})}" method="post" class="inline-block" onsubmit="return confirm('Tem certeza que deseja banir esta criatura do reino?');">
-                                <button type="submit" class="text-red-500 hover:text-red-400 underline decoration-red-500/30 hover:decoration-red-400 cursor-pointer bg-transparent border-none">
+                                <button type="submit" class="relative z-20 cursor-pointer text-red-500 hover:text-red-400 underline decoration-red-500/30 hover:decoration-red-400 cursor-pointer bg-transparent border-none">
                                     Remover
                                 </button>
                             </form>

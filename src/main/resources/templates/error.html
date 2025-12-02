@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
- <title th:text="${status} + ' • Falha no Sistema'">Erro</title>
+ <title th:text="${status} + ' • Falha no Sistema'"> 500 • Erro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;700&display=swap');
@@ -50,18 +50,6 @@
                     <strong class="block font-bold mb-1 text-red-400">Mensagem do Sistema:</strong>
                     <p th:text="${message}">Descrição do erro aqui.</p>
                 </div>
-            </div>
-
-            <div th:if="${trace}">
-                <details class="group bg-black rounded-lg border border-gray-700 overflow-hidden">
-                    <summary class="cursor-pointer p-4 font-mono text-sm text-yellow-500 font-bold hover:bg-gray-900 transition-colors flex justify-between items-center select-none">
-                        <span>> EXIBIR LOG TÉCNICO (STACK TRACE)</span>
-                        <span class="transform group-open:rotate-180 transition-transform">▼</span>
-                    </summary>
-                    <div class="border-t border-gray-800">
-                        <pre class="p-4 text-xs text-red-300 font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed" th:text="${trace}"></pre>
-                    </div>
-                </details>
             </div>
 
             <div class="text-center pt-4">
