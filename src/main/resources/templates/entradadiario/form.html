@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monsterdex - Registro de Diário</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #111827; color: #f3f4f6; }
+        .font-title { font-family: 'Cinzel', serif; }
+    </style>
+</head>
+<body class="p-4 md:p-8 min-h-screen flex items-center justify-center bg-gray-900">
+
+    <div class="w-full max-w-3xl bg-gray-800 border border-gray-700 rounded-xl shadow-2xl overflow-hidden relative z-10">
+        
+        <div class="p-8 border-b border-gray-700 text-center bg-gray-800">
+            <h1 class="text-3xl font-bold font-title text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600">
+                Escrever no Diário
+            </h1>
+            <p class="text-gray-400 mt-2 text-sm">Documente suas descobertas</p>
+        </div>
+
+        <div class="p-8">
+            <form th:action="@{/diario}" th:object="${entradaDiario}" method="post" class="space-y-6">
+                
+                <input type="hidden" th:field="*{id}" />
+
+                <div>
+                    <label for="titulo" class="block text-sm font-medium text-gray-400 mb-2">Título do Registro</label>
+                    <input type="text" id="titulo" th:field="*{titulo}" placeholder="Ex.: Encontro com o Dragão Verde" 
+                           class="w-full bg-gray-900 border border-gray-600 text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition duration-200 placeholder-gray-600">
+                    <div class="text-red-400 text-xs mt-1" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <div>
+                        <label for="criatura" class="block text-sm font-medium text-gray-400 mb-2">Criatura Relacionada</label>
+                        <select id="criatura" th:field="*{criatura}" class="w-full bg-gray-900 border border-gray-600 text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition duration-200">
+                            <option value="">-- Selecione uma Criatura --</option>
+                            <option th:each="c : ${criaturas}" 
+                                    th:value="${c.id}" 
+                                    th:text="${c.nome}">
+                                Goblin
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="usuario" class="block text-sm font-medium text-gray-400 mb-2">Autor (Usuário)</label>
+                        <select id="usuario" th:field="*{usuario}" class="w-full bg-gray-900 border border-gray-600 text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition duration-200">
+                            <option value="">-- Selecione o Autor --</option>
+                            <option th:each="u : ${usuarios}" 
+                                    th:value="${u.id}" 
+                                    th:text="${u.username}">
+                                Admin
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="conteudo" class="block text-sm font-medium text-gray-400 mb-2">Observações Detalhadas</label>
+                    <textarea id="conteudo" th:field="*{conteudo}" rows="8" placeholder="Descreva o comportamento, fraquezas ou local do encontro..." 
+                              class="w-full bg-gray-900 border border-gray-600 text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition duration-200 placeholder-gray-600 resize-none"></textarea>
+                    <div class="text-red-400 text-xs mt-1" th:if="${#fields.hasErrors('conteudo')}" th:errors="*{conteudo}"></div>
+                </div>
+
+                <div class="flex items-center justify-end gap-4 pt-6 mt-6 border-t border-gray-700 relative z-20">
+                    <a th:href="@{/diario}" class="relative z-20 cursor-pointer text-gray-400 hover:text-white text-sm font-medium transition-colors duration-200 py-2 px-4 rounded hover:bg-gray-700/50">
+                        Cancelar
+                    </a>
+
+                    <button type="submit" class="relative z-20 cursor-pointer bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition hover:scale-105">
+                        Registrar no Diário
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

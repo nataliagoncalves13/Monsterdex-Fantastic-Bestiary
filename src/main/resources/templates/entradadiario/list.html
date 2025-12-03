@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monsterdex - Diário de Bordo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #111827; color: #f3f4f6; }
+        .font-title { font-family: 'Cinzel', serif; }
+    </style>
+</head>
+<body class="p-8 min-h-screen bg-gray-900">
+
+    <div class="container mx-auto max-w-6xl">
+        
+        <header class="flex flex-col md:flex-row justify-between items-center mb-10 border-b border-gray-700 pb-6 gap-4">
+            <div>
+                <h1 class="text-4xl font-bold font-title text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600">
+                    Diário de Bordo
+                </h1>
+                <p class="text-gray-400 text-sm mt-1">Registros das caçadas e observações</p>
+            </div>
+            
+            <div class="relative z-20">
+                <a th:href="@{/diario/novo}" class="relative z-20 cursor-pointer bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white font-bold py-2 px-6 rounded-lg shadow-lg transform transition hover:scale-105 flex items-center gap-2">
+                    <span>+</span> Nova Anotação
+                </a>
+            </div>
+        </header>
+
+        <div th:if="${msg}" class="mb-8 bg-green-900/50 border border-green-500 text-green-200 px-4 py-3 rounded relative animate-pulse">
+            <strong class="font-bold">Sucesso!</strong> <span th:text="${msg}"></span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+            
+            <div th:each="entrada : ${entradas}" class="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-lg hover:shadow-yellow-900/20 transition duration-300 flex flex-col h-full relative z-10">
+                
+                <div class="mb-4">
+                    <h3 class="text-xl font-bold text-yellow-500 font-title mb-2" th:text="${entrada.titulo}">Título Aqui</h3>
+                    
+                    <div class="flex flex-wrap gap-2 text-xs font-mono">
+                        <span th:if="${entrada.criatura}" class="bg-red-900/40 text-red-300 px-2 py-1 rounded border border-red-800">
+                            ⚔️ <span th:text="${entrada.criatura.nome}">Monstro</span>
+                        </span>
+                        
+                        <span th:if="${entrada.usuario}" class="bg-blue-900/40 text-blue-300 px-2 py-1 rounded border border-blue-800">
+                            👤 <span th:text="${entrada.usuario.username}">User</span>
+                        </span>
+                    </div>
+                </div>
+
+                <p class="text-gray-300 text-sm mb-6 line-clamp-4 leading-relaxed flex-grow italic border-l-2 border-gray-600 pl-3" 
+                   th:text="${entrada.conteudo}">
+                    O conteúdo da anotação aparecerá aqui...
+                </p>
+
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-700 mt-auto relative z-20">
+                    <a th:href="@{/diario/{id}/editar(id=${entrada.id})}" class="relative z-20 cursor-pointer text-sm text-yellow-500 hover:text-yellow-300 font-bold hover:underline transition-colors">
+                        Editar
+                    </a>
+                    
+                    <span class="text-gray-600 select-none">|</span>
+                    
+                    <form th:action="@{/diario/{id}/remover(id=${entrada.id})}" method="post" class="m-0 p-0 flex" onsubmit="return confirm('Tem certeza que deseja apagar este registro histórico?');">
+                        <button type="submit" class="relative z-20 cursor-pointer text-sm text-red-500 hover:text-red-400 font-bold hover:underline bg-transparent border-none p-0">
+                            Apagar
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div th:if="${#lists.isEmpty(entradas)}" class="col-span-full text-center py-20 border-2 border-dashed border-gray-800 rounded-xl">
+                <p class="text-gray-500 font-title text-lg">Nenhum registro encontrado no diário.</p>
+            </div>
+        </div>
+
+        <div class="mt-12 text-center relative z-20">
+            <a href="/" class="relative z-20 cursor-pointer text-gray-500 hover:text-yellow-500 text-sm transition-colors">
+                ← Voltar ao Menu Principal
+            </a>
+        </div>
+    </div>
+</body>
+</html>
