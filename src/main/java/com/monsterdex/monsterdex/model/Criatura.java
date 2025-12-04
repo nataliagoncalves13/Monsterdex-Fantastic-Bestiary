@@ -42,6 +42,14 @@ public class Criatura {
     @Column(length = 500)
     private String imagemUrl;
 
+    @Size(max = 500)
+    @Column(length = 500)
+    private String habitat;
+
+    @Size(max = 500)
+    @Column(length = 500)
+    private String clima;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false) // Chave estrangeira
     private Usuario usuario;
@@ -72,6 +80,12 @@ public class Criatura {
 
     public String getImagemUrl() { return imagemUrl; }
     public void setImagemUrl(String imagemUrl) { this.imagemUrl = imagemUrl; }
+
+    public String getHabitat() { return habitat; }
+    public void setHabitat(String habitat) { this.habitat = habitat; }
+
+    public String getClima() { return clima; }
+    public void setClima(String clima) { this.clima = clima; }
     
     public Usuario getUsuario() { return usuario; }
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }
