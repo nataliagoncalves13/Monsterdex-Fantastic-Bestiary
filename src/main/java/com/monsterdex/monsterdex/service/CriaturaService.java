@@ -13,9 +13,11 @@ import java.util.List;
 public class CriaturaService {
 
     private final CriaturaRepository repository;
+    private final UnsplashService unsplashService;
 
-    public CriaturaService(CriaturaRepository repository) {
+    public CriaturaService(CriaturaRepository repository, UnsplashService unsplashService) {
         this.repository = repository;
+        this.unsplashService = unsplashService;
     }
 
     @Transactional(readOnly = true)
@@ -31,6 +33,13 @@ public class CriaturaService {
 
     @Transactional
     public Criatura salvar(Criatura c) {
+        // Busca imagem automaticamente se não tiver uma definida
+        if (c.getImagemUrl() == null || c.getImagemUrl().isEmpty()) {
+            String imagemUrl = unsplashService.buscarImagemPorNomeETipo(c.getNome(), c.getTipo());
+            if (imagemUrl != null) {
+                c.setImagemUrl(imagemUrl);
+            }
+        }
         return repository.save(c);
     }
 

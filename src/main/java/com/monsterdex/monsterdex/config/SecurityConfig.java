@@ -32,31 +32,37 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-            
-                .requestMatchers("/", "/login", "/usuarios/cadastro", "/css/**", "/js/**", "/images/**").permitAll()
+                // Páginas públicas
+                .requestMatchers("/", "/index", "/login", "/usuarios/cadastro", "/usuarios/salvar", "/css/**", "/js/**", "/images/**").permitAll()
                 
-                
+                // Console H2 (apenas para desenvolvimento)
                 .requestMatchers("/h2-console/**").permitAll()
                 
-               
-                .requestMatchers("/api/**").permitAll()
+                // Swagger e API Docs
+                .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/api/**").permitAll()
                 
-                
+                // Todas as outras requisições precisam de autenticação
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                .loginPage("/login") // 
-                .defaultSuccessUrl("/criaturas", true) 
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/", true)
+                .failureUrl("/login?error=true")
                 .permitAll()
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout") 
+                .logoutSuccessUrl("/login?logout")
                 .permitAll()
             )
-            
-            .headers(headers -> headers.frameOptions().sameOrigin())
-            .csrf(csrf -> csrf.disable()); 
+            // Necessário para o console H2
+            .headers(headers -> headers
+                .frameOptions(frameOptions -> frameOptions.sameOrigin())
+            )
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/h2-console/**", "/api/**")
+            );
 
         return http.build();
     }

@@ -38,6 +38,10 @@ public class Criatura {
     @Column(length = 2000)
     private String descricao;
 
+    @Size(max = 500)
+    @Column(length = 500)
+    private String imagemUrl;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false) // Chave estrangeira
     private Usuario usuario;
@@ -65,6 +69,9 @@ public class Criatura {
 
     public String getDescricao() { return descricao; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
+
+    public String getImagemUrl() { return imagemUrl; }
+    public void setImagemUrl(String imagemUrl) { this.imagemUrl = imagemUrl; }
     
     public Usuario getUsuario() { return usuario; }
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }
