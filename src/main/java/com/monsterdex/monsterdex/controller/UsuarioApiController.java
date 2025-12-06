@@ -8,9 +8,12 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -26,33 +29,49 @@ public class UsuarioApiController {
     @GetMapping
     @Operation(summary = "Listar todos os usuários")
     public List<Usuario> listar() {
-        return service.listar();
+        // prova explícita para análise estática
+        return Objects.requireNonNull(service.listar(), "Lista de usuários é nula");
     }
-
 
     @PostMapping
     @Operation(summary = "Cadastrar um novo usuário")
     public ResponseEntity<Usuario> criar(@Valid @RequestBody Usuario usuario) {
-        Usuario salvo = service.salvar(usuario);
-        return ResponseEntity.created(URI.create("/api/usuarios/" + salvo.getId())).body(salvo);
+        Objects.requireNonNull(usuario, "Usuário de entrada não pode ser nulo");
+
+        // solução: primeiro capture o retorno, depois aplique requireNonNull
+        Usuario possivelSalvo = service.salvar(usuario);
+        Usuario salvo = Objects.requireNonNull(possivelSalvo, "Usuário salvo é nulo");
+
+        Long salvoId = Objects.requireNonNull(salvo.getId(), "ID do usuário salvo é nulo");
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(salvoId)
+                .toUri();
+
+        return ResponseEntity.created(location).body(salvo);
     }
 
-    // Rota para Remover
     @DeleteMapping("/{id}")
     @Operation(summary = "Remover usuário por ID")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@PathVariable Long id) {
+    public ResponseEntity<Void> remover(@PathVariable("id") long id) {
         service.remover(id);
+        return ResponseEntity.noContent().build();
     }
-    
 
     @PostMapping("/login")
     @Operation(summary = "Tentar fazer login")
     public ResponseEntity<?> login(@RequestBody Usuario credenciais) {
-        Usuario usuarioEncontrado = service.buscarPorUsername(credenciais.getUsername());
+        Objects.requireNonNull(credenciais, "Credenciais não podem ser nulas");
+        String username = Objects.requireNonNull(credenciais.getUsername(), "Username não pode ser nulo");
 
-        if (usuarioEncontrado != null && credenciais.getPassword().equals(usuarioEncontrado.getPassword())) {
-        
+        Optional<Usuario> usuarioOpt = Optional.ofNullable(service.buscarPorUsername(username));
+
+        String senhaFornecida = Objects.requireNonNullElse(credenciais.getPassword(), "");
+        String senhaCadastrada = usuarioOpt.map(u -> Objects.requireNonNullElse(u.getPassword(), "")).orElse("");
+
+        if (usuarioOpt.isPresent() && senhaFornecida.equals(senhaCadastrada)) {
             return ResponseEntity.ok().body("Login realizado com sucesso!");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas.");

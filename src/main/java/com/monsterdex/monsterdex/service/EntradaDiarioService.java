@@ -3,42 +3,60 @@ package com.monsterdex.monsterdex.service;
 import com.monsterdex.monsterdex.model.EntradaDiario;
 import com.monsterdex.monsterdex.model.Usuario;
 import com.monsterdex.monsterdex.repository.EntradaDiarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional; 
+import java.util.Objects;
+import java.util.Optional;
+
 
 @Service
 public class EntradaDiarioService {
 
-    @Autowired
-    private EntradaDiarioRepository diarioRepository;
-    
+    private final EntradaDiarioRepository diarioRepository;
 
-
-    public EntradaDiario salvar(EntradaDiario entrada) {
-       
-        return diarioRepository.save(entrada);
+    public EntradaDiarioService(EntradaDiarioRepository diarioRepository) {
+        this.diarioRepository = diarioRepository;
     }
 
-   
+    @Transactional
+    @NonNull
+    public EntradaDiario salvar(@NonNull EntradaDiario entrada) {
+        Objects.requireNonNull(entrada, "entrada não pode ser null");
+        EntradaDiario salvo = diarioRepository.save(entrada);
+        // reforça para o analisador que o retorno não será null
+        Objects.requireNonNull(salvo, "salvo não pode ser null");
+        return salvo;
+    }
+
+    @Transactional(readOnly = true)
+    @NonNull
     public List<EntradaDiario> listarTodas() {
-        return diarioRepository.findAll();
+        List<EntradaDiario> list = diarioRepository.findAll();
+        Objects.requireNonNull(list, "lista de entradas não pode ser null");
+        return list;
     }
 
- 
-    public List<EntradaDiario> listarPorUsuario(Usuario usuario) {
-        return diarioRepository.findByUsuario(usuario);
+    @Transactional(readOnly = true)
+    @NonNull
+    public List<EntradaDiario> listarPorUsuario(@NonNull Usuario usuario) {
+        Objects.requireNonNull(usuario, "usuario não pode ser null");
+        List<EntradaDiario> list = diarioRepository.findByUsuario(usuario);
+        Objects.requireNonNull(list, "lista por usuário não pode ser null");
+        return list;
     }
-    
-    
-    public Optional<EntradaDiario> buscarPorId(Long id) {
+
+    @Transactional(readOnly = true)
+    public Optional<EntradaDiario> buscarPorId(@NonNull Long id) {
+        Objects.requireNonNull(id, "id não pode ser null");
         return diarioRepository.findById(id);
     }
 
-
-    public void remover(Long id) {
+    @Transactional
+    public void remover(@NonNull Long id) {
+        Objects.requireNonNull(id, "id não pode ser null");
         diarioRepository.deleteById(id);
     }
 }
