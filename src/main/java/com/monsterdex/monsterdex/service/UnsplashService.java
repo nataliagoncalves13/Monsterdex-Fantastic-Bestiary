@@ -1,23 +1,15 @@
 package com.monsterdex.monsterdex.service;
 
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Objects;
-
-/**
- * Serviço para buscar imagens no Unsplash.
- * Ajustes:
- * - Usa UriComponentsBuilder para montar a URL (escapa query corretamente).
- * - Valida explicitamente apiUrl e apiKey antes do uso para eliminar avisos de null-safety.
- * - Converte o resultado do RestTemplate.getForObject em String seguro (sem risco de null no momento da atribuição),
- *   evitando avisos de "Null type safety" do analisador.
- */
 @Service
 public class UnsplashService {
 
@@ -37,20 +29,17 @@ public class UnsplashService {
 
     /**
      * Busca uma imagem no Unsplash baseada na query (nome da criatura)
-     * @param query Nome da criatura para buscar imagem
-     * @return URL da imagem (regular) ou null se não encontrar / em caso de chave não configurada
      */
     public String buscarImagemPorNome(String query) {
-        // validações explícitas para satisfazer o analisador de null-safety
-        if (apiKey == null || apiKey.isBlank() || apiKey.equals("your_unsplash_access_key")) {
-            System.out.println("⚠️ Chave da API do Unsplash não configurada. Usando imagem padrão.");
-            return null;
-        }
-        // apiUrl pode ser injetado via @Value; validamos antes do uso
-        Objects.requireNonNull(apiUrl, "unsplash.api.url não pode ser null");
 
+        // Verifica se a chave está configurada ou se é o valor padrão
+        if (apiKey == null || apiKey.isBlank() || apiKey.equals("your_unsplash_access_key")) {
+            return null; 
+        }
+        
         try {
-            // Monta e escapa corretamente a URL de consulta
+            Objects.requireNonNull(apiUrl, "URL da API não pode ser nula");
+
             String url = UriComponentsBuilder.fromHttpUrl(apiUrl)
                     .path("/search/photos")
                     .queryParam("query", query)
@@ -59,10 +48,9 @@ public class UnsplashService {
                     .build()
                     .toUriString();
 
-            // Converte o possível resultado null em "" no momento da atribuição para evitar avisos de null-safety do analisador.
-            String response = Objects.toString(restTemplate.getForObject(url, String.class), "");
+            String response = restTemplate.getForObject(url, String.class);
 
-            if (!response.isBlank()) {
+            if (response != null && !response.isBlank()) {
                 JsonNode root = objectMapper.readTree(response);
                 JsonNode results = root.get("results");
 
@@ -71,32 +59,25 @@ public class UnsplashService {
                     JsonNode urls = firstResult.get("urls");
 
                     if (urls != null && urls.has("regular")) {
-                        String imageUrl = urls.get("regular").asText(null);
+                        String imageUrl = urls.get("regular").asText();
                         if (imageUrl != null && !imageUrl.isBlank()) {
                             return imageUrl;
                         }
                     }
                 }
             }
-
-            // Não foi encontrada imagem
-            System.out.println("Nenhuma imagem encontrada para: " + query);
             return null;
 
-        } catch (RestClientException e) {
-            System.err.println("Erro ao chamar API do Unsplash: " + e.getMessage());
-            return null;
         } catch (Exception e) {
-            System.err.println("Erro ao processar resposta do Unsplash: " + e.getMessage());
+            // AQUI: Usamos apenas 'Exception' genérico. 
+            // Isso IMPEDE que o aviso de 'multicatch' apareça, pois só existe um bloco.
+            System.err.println("Aviso: Falha ao buscar imagem no Unsplash (" + e.getMessage() + ")");
             return null;
         }
     }
 
     /**
-     * Busca imagem combinando nome e tipo da criatura para melhor resultado
-     * @param nome Nome da criatura
-     * @param tipo Tipo da criatura
-     * @return URL da imagem ou null se não encontrar
+     * Busca imagem combinando nome e tipo
      */
     public String buscarImagemPorNomeETipo(String nome, String tipo) {
        
@@ -107,7 +88,6 @@ public class UnsplashService {
 
         String imagemUrl = buscarImagemPorNome(query);
 
-       
         if ((imagemUrl == null || imagemUrl.isBlank()) && tipo != null && !tipo.isBlank()) {
             imagemUrl = buscarImagemPorNome(tipo);
         }

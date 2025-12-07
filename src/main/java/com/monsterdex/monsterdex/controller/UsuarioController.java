@@ -1,63 +1,55 @@
 package com.monsterdex.monsterdex.controller;
 
 import com.monsterdex.monsterdex.model.Usuario;
-import com.monsterdex.monsterdex.service.UsuarioService;
-import jakarta.validation.Valid;
+import com.monsterdex.monsterdex.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Objects;
+import jakarta.validation.Valid;
+import java.util.Collections;
 
 @Controller
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
-    private final UsuarioService service;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-    private static final String FORM_VIEW = "usuarios/form";
-    private static final String LIST_VIEW = "usuarios/list";
-
-    public UsuarioController(UsuarioService service) {
-        this.service = service;
-    }
-
-    @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("usuarios", Objects.requireNonNull(service.listar(), "Lista de usuários é nula"));
-        return LIST_VIEW;
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/cadastro")
-    public String mostrarFormularioCadastro(Model model) {
+    public String cadastro(Model model) {
         model.addAttribute("usuario", new Usuario());
-        return FORM_VIEW;
+        return "usuarios/form";
     }
 
-    @PostMapping
-    @SuppressWarnings("null")
-    public String salvar(@Valid @ModelAttribute("usuario") Usuario usuario, BindingResult br, RedirectAttributes ra) {
-        if (br.hasErrors()) {
-            return FORM_VIEW;
+    @PostMapping("/cadastro")
+    public String salvar(@Valid Usuario usuario, BindingResult result, RedirectAttributes redirectAttributes) {
+        
+        if (result.hasErrors()) {
+            return "usuarios/form";
         }
 
-        // prova explícita que a entrada não é nula
-        Objects.requireNonNull(usuario, "Objeto usuario não pode ser nulo");
+        if (usuarioRepository.findByUsername(usuario.getUsername()).isPresent()) {
+            result.rejectValue("username", "error.usuario", "Este nome de usuário já está em uso.");
+            return "usuarios/form";
+        }
 
-        // capture o retorno e verifique, mas NÃO crie variável não utilizada
-        Usuario possivelSalvo = service.salvar(usuario);
-        Objects.requireNonNull(possivelSalvo, "Falha ao salvar usuário");
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        
+        usuario.setRoles(Collections.singleton("USER"));
 
-        ra.addFlashAttribute("msg", "Usuário cadastrado com sucesso! (Senha ainda não criptografada!)");
+        usuarioRepository.save(usuario);
+        
+        redirectAttributes.addFlashAttribute("msg", "Guerreiro registrado! Entre com suas credenciais.");
         return "redirect:/login";
-    }
-
-    @PostMapping("/{id}/remover")
-    public String remover(@PathVariable("id") long id, RedirectAttributes ra) {
-        service.remover(id);
-        ra.addFlashAttribute("msg", "Usuário removido.");
-        return "redirect:/usuarios";
     }
 }

@@ -1,131 +1,103 @@
 package com.monsterdex.monsterdex.controller;
 
-import com.monsterdex.monsterdex.dto.CriaturaRequest;
 import com.monsterdex.monsterdex.model.Criatura;
 import com.monsterdex.monsterdex.model.Usuario;
+import com.monsterdex.monsterdex.repository.UsuarioRepository;
 import com.monsterdex.monsterdex.service.CriaturaService;
 import com.monsterdex.monsterdex.service.UnsplashService;
 import com.monsterdex.monsterdex.service.WeatherService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Objects;
+import jakarta.validation.Valid;
+import java.security.Principal;
 
-/**
- * Controller responsável por endpoints relacionados a criaturas.
- * Observação: existe também CriaturaApiController (para testes/REST).
- */
-@RestController
+@Controller
 @RequestMapping("/criaturas")
 public class CriaturaController {
 
-    @Autowired
-    private CriaturaService criaturaService;
+    private final CriaturaService criaturaService;
+    private final UnsplashService unsplashService;
+    private final WeatherService weatherService;
+    private final UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private UnsplashService unsplashService;
-
-    @Autowired
-    private WeatherService weatherService;
-
-    private Usuario getUsuarioFake() {
-        Usuario u = new Usuario();
-        u.setId(1L);
-        u.setNome("Usuário Teste");
-        u.setUsername("usuario_teste");
-        u.setEmail("teste@exemplo.com");
-        return u;
+    public CriaturaController(CriaturaService criaturaService, UnsplashService unsplashService, WeatherService weatherService, UsuarioRepository usuarioRepository) {
+        this.criaturaService = criaturaService;
+        this.unsplashService = unsplashService;
+        this.weatherService = weatherService;
+        this.usuarioRepository = usuarioRepository;
     }
 
-    // ---------- LISTAR TODAS (web) ----------
-    @GetMapping("/web")
-    public ResponseEntity<List<Criatura>> listar() {
-        return ResponseEntity.ok(criaturaService.listarTodas());
+    @GetMapping
+    public String listar(Model model) {
+        model.addAttribute("criaturas", criaturaService.listar());
+        return "criaturas/lista";
     }
 
-    // ---------- BUSCAR POR ID ----------
-    @GetMapping("/{id}")
-    public ResponseEntity<Criatura> buscarPorId(@PathVariable("id") long id) {
-        // Use primitive long to avoid null-safety warnings; autoboxing will convert se necessário.
-        return ResponseEntity.ok(criaturaService.buscarPorId(id));
+    @GetMapping("/novo")
+    public String novo(Model model) {
+        model.addAttribute("criatura", new Criatura());
+        return "criaturas/form";
     }
 
-    // ---------- CRIAR ----------
+    @GetMapping("/{id}/editar")
+    public String editar(@PathVariable("id") Long id, Model model) {
+        Criatura criatura = criaturaService.buscarPorId(id)
+            .orElseThrow(() -> new IllegalArgumentException("ID inválido: " + id));
+        
+        model.addAttribute("criatura", criatura);
+        return "criaturas/form";
+    }
+
     @PostMapping
-    public ResponseEntity<Criatura> criar(@Validated @RequestBody CriaturaRequest dto) {
-
-        Usuario usuario = getUsuarioFake();
-
-        Criatura criatura = new Criatura();
-        criatura.setNome(dto.getNome());
-        criatura.setTipo(dto.getTipo());
-        criatura.setDescricao(dto.getDescricao());
-        criatura.setHabitat(dto.getHabitat());
-        criatura.setUsuario(usuario);
-
-        // Unsplash
-        String imagem = unsplashService.buscarImagemPorNomeETipo(dto.getNome(), dto.getTipo());
-        criatura.setImagemUrl(imagem);
-
-        // Clima do habitat
-        if (dto.getHabitat() != null && !dto.getHabitat().isBlank()) {
-            String clima = weatherService.buscarClimaDoHabitat(dto.getHabitat());
-            criatura.setClima(clima);
+    public String salvar(@Valid @ModelAttribute("criatura") Criatura criatura, BindingResult result, RedirectAttributes redirectAttributes, Principal principal) {
+        
+        if (result.hasErrors()) {
+            return "criaturas/form";
         }
 
-        Criatura criada = criaturaService.salvar(criatura);
-
-        // Garante que o id salvo não seja nulo antes de passar para buildAndExpand,
-        // evitando warnings de "Null type safety" e possíveis NPEs.
-        Long criadaId = Objects.requireNonNull(criada.getId(), "ID do recurso salvo é nulo");
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(criadaId)
-                .toUri();
-
-        return ResponseEntity.created(location).body(criada);
-    }
-
-    // ---------- ATUALIZAR ----------
-    @PutMapping("/{id}")
-    public ResponseEntity<Criatura> atualizar(
-            @PathVariable("id") long id,
-            @Validated @RequestBody CriaturaRequest dto
-    ) {
-        Usuario usuario = getUsuarioFake();
-        Criatura criatura = criaturaService.buscarPorId(id);
-
-        criatura.setNome(dto.getNome());
-        criatura.setTipo(dto.getTipo());
-        criatura.setDescricao(dto.getDescricao());
-        criatura.setHabitat(dto.getHabitat());
-        criatura.setUsuario(usuario);
-
-        String imagem = unsplashService.buscarImagemPorNomeETipo(dto.getNome(), dto.getTipo());
-        criatura.setImagemUrl(imagem);
-
-        if (dto.getHabitat() != null && !dto.getHabitat().isBlank()) {
-            String clima = weatherService.buscarClimaDoHabitat(dto.getHabitat());
-            criatura.setClima(clima);
+        if (principal != null) {
+            String username = principal.getName();
+            Usuario usuario = usuarioRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("Usuário logado não encontrado no banco"));
+            criatura.setUsuario(usuario);
+        } else {
+            Usuario u = new Usuario(); u.setId(1L); 
+            criatura.setUsuario(u);
         }
 
-        Criatura atualizada = criaturaService.salvar(criatura);
+        try {
+            if (criatura.getImagemUrl() == null || criatura.getImagemUrl().isEmpty()) {
+                String imagem = unsplashService.buscarImagemPorNomeETipo(criatura.getNome(), criatura.getTipo());
+                criatura.setImagemUrl(imagem);
+            }
+        } catch (Exception e) {
+            System.out.println("Aviso: Não foi possível buscar imagem na API externa.");
+        }
 
-        return ResponseEntity.ok(atualizada);
+        try {
+            if (criatura.getHabitat() != null && !criatura.getHabitat().isBlank()) {
+                String clima = weatherService.buscarClimaDoHabitat(criatura.getHabitat());
+                criatura.setClima(clima);
+            }
+        } catch (Exception e) {
+            System.out.println("Aviso: Não foi possível buscar clima na API externa.");
+        }
+
+        criaturaService.salvar(criatura);
+        
+        redirectAttributes.addFlashAttribute("msg", "Criatura catalogada com sucesso!");
+        return "redirect:/criaturas";
     }
 
-    // ---------- DELETAR ----------
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable("id") long id) {
-        criaturaService.deletar(id);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/{id}/remover")
+    public String remover(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        criaturaService.remover(id);
+        redirectAttributes.addFlashAttribute("msg", "Criatura removida do bestiário.");
+        return "redirect:/criaturas";
     }
 }

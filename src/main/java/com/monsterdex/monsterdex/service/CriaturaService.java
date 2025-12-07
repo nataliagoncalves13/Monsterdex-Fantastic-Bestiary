@@ -1,25 +1,22 @@
 package com.monsterdex.monsterdex.service;
 
-import com.monsterdex.monsterdex.model.Criatura;
-import com.monsterdex.monsterdex.repository.CriaturaRepository;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
 
-import java.util.List;
+import com.monsterdex.monsterdex.model.Criatura;
+import com.monsterdex.monsterdex.repository.CriaturaRepository;
 
 @Service
+@SuppressWarnings("null")
 public class CriaturaService {
 
     private final CriaturaRepository repository;
-    private final UnsplashService unsplashService;
-    private final WeatherService weatherService;
 
-    public CriaturaService(CriaturaRepository repository, UnsplashService unsplashService, WeatherService weatherService) {
+    public CriaturaService(CriaturaRepository repository) {
         this.repository = repository;
-        this.unsplashService = unsplashService;
-        this.weatherService = weatherService;
     }
 
     @Transactional(readOnly = true)
@@ -28,39 +25,19 @@ public class CriaturaService {
     }
 
     @Transactional(readOnly = true)
-    public Criatura buscarPorId(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Criatura não encontrada"));
+    public Optional<Criatura> buscarPorId(Long id) {
+        return repository.findById(id);
     }
 
     @Transactional
-    public Criatura salvar(Criatura c) {
-        // Busca imagem automaticamente se não tiver uma definida
-        if (c.getImagemUrl() == null || c.getImagemUrl().isEmpty()) {
-            String imagemUrl = unsplashService.buscarImagemPorNomeETipo(c.getNome(), c.getTipo());
-            if (imagemUrl != null) {
-                c.setImagemUrl(imagemUrl);
-            }
-        }
-        
-        // Busca informações de clima automaticamente se não tiver definidas
-        if (c.getClima() == null || c.getClima().isEmpty()) {
-            if (c.getHabitat() != null && !c.getHabitat().isEmpty()) {
-                String clima = weatherService.buscarClimaDoHabitat(c.getHabitat());
-                if (clima != null) {
-                    c.setClima(clima);
-                }
-            }
-        }
-        
-        return repository.save(c);
+    public Criatura salvar(Criatura criatura) {
+        return repository.save(criatura);
     }
 
     @Transactional
     public void remover(Long id) {
-        if (!repository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Criatura não encontrada");
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
         }
-        repository.deleteById(id);
     }
 }

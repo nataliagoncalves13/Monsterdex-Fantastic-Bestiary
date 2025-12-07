@@ -46,7 +46,7 @@ public class EntradaDiarioController {
     }
 
     @PostMapping
-    @SuppressWarnings("null") // suprime localmente o aviso de analisador que continua reclamando
+    @SuppressWarnings("null")
     public String salvar(@Valid @ModelAttribute("entradaDiario") EntradaDiario entrada, BindingResult br, RedirectAttributes ra) {
         if (br.hasErrors()) {
             ra.addFlashAttribute("criaturas", criaturaService.listar());
@@ -54,7 +54,6 @@ public class EntradaDiarioController {
             return FORM_VIEW;
         }
 
-        // prova explícita em runtime de que o service não retornou null
         Objects.requireNonNull(diarioService.salvar(entrada), "Entrada de diário salva é nula");
 
         ra.addFlashAttribute("msg", "Entrada de diário registrada com sucesso.");

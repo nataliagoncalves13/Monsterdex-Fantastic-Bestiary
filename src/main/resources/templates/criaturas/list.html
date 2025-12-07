@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monsterdex - Lista de Criaturas</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;700&display=swap');
-        
         body { font-family: 'Inter', sans-serif; background-color: #111827; color: #f3f4f6; }
         .font-title { font-family: 'Cinzel', serif; }
-        
     </style>
 </head>
 <body class="p-8">
@@ -28,18 +25,18 @@
             </p>
         </header>
 
-        <div th:if="${msg}" class="mb-6 bg-green-900/50 border border-green-500 text-green-200 px-4 py-3 rounded relative" role="alert">
+        <div th:if="${msg}" class="mb-6 bg-green-900/50 border border-green-500 text-green-200 px-4 py-3 rounded relative animate-pulse" role="alert">
             <strong class="font-bold">Sucesso!</strong>
             <span class="block sm:inline" th:text="${msg}"></span>
         </div>
 
-        <div class="flex justify-end mb-6">
+        <div class="flex justify-end mb-6 relative z-20">
             <a th:href="@{/criaturas/novo}" class="relative z-20 cursor-pointer bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white font-bold py-2 px-6 rounded-lg shadow-lg transform transition hover:scale-105">
                 + Nova Criatura
             </a>
         </div>
 
-        <div class="overflow-x-auto shadow-md sm:rounded-lg border border-gray-700">
+        <div class="overflow-x-auto shadow-md sm:rounded-lg border border-gray-700 relative z-10">
             <table class="w-full text-left text-gray-300">
                 <thead class="bg-gray-800 text-yellow-400 font-title uppercase text-sm tracking-wider">
                     <tr>
@@ -50,7 +47,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-700 bg-gray-900">
-                    <tr th:each="c : ${criaturas}" class="hover:bg-gray-800 transition duration-150">
+                    <tr th:each="c : ${criaturas}" class="hover:bg-gray-800 transition duration-150 group">
                         <td class="px-6 py-4 whitespace-nowrap text-gray-400 font-mono text-sm" th:text="${c.id}">1</td>
                         <td class="px-6 py-4 whitespace-nowrap font-bold text-white" th:text="${c.nome}">Goblin</td>
                         <td class="px-6 py-4 whitespace-nowrap">
@@ -58,16 +55,19 @@
                                 Fada
                             </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
-                            <a th:href="@{/criaturas/{id}/editar(id=${c.id})}" class="relative z-20 cursor-pointer text-yellow-500 hover:text-yellow-300 transition-colors">
-                                Editar
-                            </a>
-                            
-                            <form th:action="@{/criaturas/{id}/remover(id=${c.id})}" method="post" class="inline-block" onsubmit="return confirm('Tem certeza que deseja banir esta criatura do reino?');">
-                                <button type="submit" class="relative z-20 cursor-pointer text-red-500 hover:text-red-400 underline decoration-red-500/30 hover:decoration-red-400 cursor-pointer bg-transparent border-none">
-                                    Remover
-                                </button>
-                            </form>
+                        
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium relative z-20">
+                            <div class="flex items-center justify-end gap-4">
+                                <a th:href="@{/criaturas/{id}/editar(id=${c.id})}" class="relative z-20 cursor-pointer text-yellow-500 hover:text-yellow-300 transition-colors font-bold hover:underline">
+                                    Editar
+                                </a>
+                                
+                                <form th:action="@{/criaturas/{id}/remover(id=${c.id})}" method="post" class="m-0 p-0 flex" onsubmit="return confirm('Tem certeza que deseja banir esta criatura do reino?');">
+                                    <button type="submit" class="relative z-20 cursor-pointer text-red-500 hover:text-red-400 font-bold hover:underline bg-transparent border-none p-0">
+                                        Remover
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
 
@@ -80,8 +80,8 @@
             </table>
         </div>
         
-        <div class="mt-8 text-center">
-            <a href="/" class="text-gray-500 hover:text-yellow-500 text-sm transition-colors">
+        <div class="mt-8 text-center relative z-20">
+            <a href="/" class="relative z-20 cursor-pointer text-gray-500 hover:text-yellow-500 text-sm transition-colors">
                 ← Voltar ao Menu Principal
             </a>
         </div>
