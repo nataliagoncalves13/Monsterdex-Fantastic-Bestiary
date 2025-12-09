@@ -49,12 +49,11 @@ public class WeatherService {
 
         try {
             String localizacao = habitat == null ? "" : HABITAT_LOCATIONS.getOrDefault(habitat.toLowerCase(), habitat);
-            // garante que localizacao nunca seja null (evita avisos da análise estática)
             if (localizacao == null) {
                 localizacao = "";
             }
 
-            // garante que apiUrl não seja null: prova explícita para a análise estática
+
             String baseUrl = Objects.requireNonNull(apiUrl, "Propriedade weather.api.url não configurada");
 
             String url = UriComponentsBuilder.fromHttpUrl(baseUrl)
@@ -72,7 +71,6 @@ public class WeatherService {
                 if (body != null && !body.isBlank()) {
                     JsonNode root = objectMapper.readTree(body);
 
-                    // checar se weather é array e tem ao menos 1 elemento
                     JsonNode weatherNode = root.path("weather");
                     String descricao = "desconhecido";
                     if (weatherNode.isArray() && weatherNode.size() > 0) {

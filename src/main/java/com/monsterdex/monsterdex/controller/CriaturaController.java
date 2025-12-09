@@ -1,5 +1,17 @@
 package com.monsterdex.monsterdex.controller;
 
+import java.security.Principal;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.monsterdex.monsterdex.model.Criatura;
 import com.monsterdex.monsterdex.model.Usuario;
 import com.monsterdex.monsterdex.repository.UsuarioRepository;
@@ -7,14 +19,7 @@ import com.monsterdex.monsterdex.service.CriaturaService;
 import com.monsterdex.monsterdex.service.UnsplashService;
 import com.monsterdex.monsterdex.service.WeatherService;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import jakarta.validation.Valid;
-import java.security.Principal;
 
 @Controller
 @RequestMapping("/criaturas")
@@ -35,7 +40,7 @@ public class CriaturaController {
     @GetMapping
     public String listar(Model model) {
         model.addAttribute("criaturas", criaturaService.listar());
-        return "criaturas/lista";
+        return "criaturas/list";
     }
 
     @GetMapping("/novo")

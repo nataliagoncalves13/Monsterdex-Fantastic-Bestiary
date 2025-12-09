@@ -23,9 +23,11 @@
             <div class="text-2xl font-bold font-title text-yellow-500 tracking-wider cursor-default">
                 MONSTERDEX
             </div>
-            <div class="space-x-4 relative z-50">
-                <a th:href="@{/login}" class="cursor-pointer text-gray-400 hover:text-white transition-colors text-sm font-medium relative z-50">Login</a>
-                <a th:href="@{/usuarios/cadastro}" class="cursor-pointer bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors relative z-50">
+            <div class="space-x-6 relative z-50 flex items-center">
+                
+                <a th:href="@{/login}" class="cursor-pointer text-gray-400 hover:text-white transition-colors text-sm font-medium">Login</a>
+                
+                <a th:href="@{/usuarios/cadastro}" class="cursor-pointer bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors">
                     Registrar
                 </a>
             </div>
@@ -49,8 +51,8 @@
                     Abrir o Grimório
                 </a>
                 
-                <a th:href="@{/usuarios/cadastro}" class="cursor-pointer border border-gray-600 hover:border-white text-gray-300 hover:text-white font-bold py-4 px-10 rounded-lg transition-colors text-lg relative z-20">
-                    Juntar-se à Guilda
+                <a th:href="@{/diario}" class="cursor-pointer border border-gray-600 hover:border-white text-gray-300 hover:text-white font-bold py-4 px-10 rounded-lg transition-colors text-lg relative z-20">
+                    Meu Diário
                 </a>
             </div>
         </div>
