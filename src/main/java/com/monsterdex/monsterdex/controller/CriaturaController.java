@@ -17,7 +17,6 @@ import com.monsterdex.monsterdex.model.Usuario;
 import com.monsterdex.monsterdex.repository.UsuarioRepository;
 import com.monsterdex.monsterdex.service.CriaturaService;
 import com.monsterdex.monsterdex.service.UnsplashService;
-import com.monsterdex.monsterdex.service.WeatherService;
 
 import jakarta.validation.Valid;
 
@@ -27,13 +26,11 @@ public class CriaturaController {
 
     private final CriaturaService criaturaService;
     private final UnsplashService unsplashService;
-    private final WeatherService weatherService;
     private final UsuarioRepository usuarioRepository;
 
-    public CriaturaController(CriaturaService criaturaService, UnsplashService unsplashService, WeatherService weatherService, UsuarioRepository usuarioRepository) {
+    public CriaturaController(CriaturaService criaturaService, UnsplashService unsplashService, UsuarioRepository usuarioRepository) {
         this.criaturaService = criaturaService;
         this.unsplashService = unsplashService;
-        this.weatherService = weatherService;
         this.usuarioRepository = usuarioRepository;
     }
 
@@ -82,15 +79,6 @@ public class CriaturaController {
             }
         } catch (Exception e) {
             System.out.println("Aviso: Não foi possível buscar imagem na API externa.");
-        }
-
-        try {
-            if (criatura.getHabitat() != null && !criatura.getHabitat().isBlank()) {
-                String clima = weatherService.buscarClimaDoHabitat(criatura.getHabitat());
-                criatura.setClima(clima);
-            }
-        } catch (Exception e) {
-            System.out.println("Aviso: Não foi possível buscar clima na API externa.");
         }
 
         criaturaService.salvar(criatura);
