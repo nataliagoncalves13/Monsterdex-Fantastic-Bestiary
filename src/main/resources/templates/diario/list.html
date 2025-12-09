@@ -146,7 +146,6 @@
 
         function abrirModal(id, titulo) {
             idParaRemover = id;
-            // Define o título no texto do modal
             document.getElementById('modal-titulo-entrada').innerText = '"' + titulo + '"';
 
             const modal = document.getElementById('modal-delete');
@@ -163,14 +162,12 @@
             idParaRemover = null;
         }
 
-        // Ao clicar em "Sim, Apagar", submete o formulário correspondente
         document.getElementById('btn-confirmar-delete').addEventListener('click', function () {
             if (idParaRemover) {
                 document.getElementById('form-remover-' + idParaRemover).submit();
             }
         });
 
-        // Fecha o modal se clicar fora (no overlay)
         document.querySelector('.modal-overlay').addEventListener('click', fecharModal);
     </script>
 

@@ -1,15 +1,16 @@
 package com.monsterdex.monsterdex.service;
 
-import com.monsterdex.monsterdex.model.EntradaDiario;
-import com.monsterdex.monsterdex.model.Usuario;
-import com.monsterdex.monsterdex.repository.EntradaDiarioRepository;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import com.monsterdex.monsterdex.model.EntradaDiario;
+import com.monsterdex.monsterdex.model.Usuario;
+import com.monsterdex.monsterdex.repository.EntradaDiarioRepository;
 
 
 @Service
@@ -26,7 +27,6 @@ public class EntradaDiarioService {
     public EntradaDiario salvar(@NonNull EntradaDiario entrada) {
         Objects.requireNonNull(entrada, "entrada não pode ser null");
         EntradaDiario salvo = diarioRepository.save(entrada);
-        // reforça para o analisador que o retorno não será null
         Objects.requireNonNull(salvo, "salvo não pode ser null");
         return salvo;
     }

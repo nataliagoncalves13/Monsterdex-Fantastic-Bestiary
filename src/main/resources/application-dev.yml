@@ -40,9 +40,3 @@ unsplash:
   api:
     key: mXoMa0h9wPkCk-F9j44RmY-c8zx61G2MKgFowR4V-3s
     url: https://api.unsplash.com
-
-# API Externa - OpenWeatherMap
-weather:
-  api:
-    key: 1a8dfd5182e9b5f6c4c2ec3f5e83ef94
-    url: https://api.openweathermap.org/data/2.5
