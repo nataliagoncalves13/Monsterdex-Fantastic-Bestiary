@@ -39,7 +39,6 @@ Com autenticação segura, arquitetura profissional em camadas (MVC), banco de d
 * Integração com APIs externas:
 
   * Imagens (Unsplash)
-  * Clima (OpenWeather) 
 * Documentação dos endpoints (Swagger)
 
 ---
@@ -95,7 +94,6 @@ Inclui:
 * descrição
 * data
 * localização
-* clima (via API externa)
 
 ---
 
