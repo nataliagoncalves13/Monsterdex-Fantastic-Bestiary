@@ -1,22 +1,119 @@
-# MonsterDex - Bestiário Fantástico
-Grupo: Natalia Gonçalves, Isabela Azevedo, Leonardo Trindade
+# 🐉 MonsterDex – Bestiário de Criaturas Fantásticas
 
-Datas importantes:
-- Respositório git com membros do grupo: 18/10/2025
-- Scaffold: 25/10/2025
-- Rotas e funcionalidades: 01/11/2025
-- Conexão com banco de dados: 08/11/2025
-- Autenticação e autorização: 08/11/2025
-- Término do projeto e vídeo (OPCIONAL): 29/11/2025 em vídeo.
-- Avaliação final (arguição): 06/12/2025.
+O **MonsterDex** é uma aplicação web criada para organizar, catalogar e documentar criaturas fantásticas em um ambiente totalmente customizável pelos próprios usuários. Inspirado em bestiários clássicos e enciclopédias de monstros, o sistema permite que qualquer pessoa — jogadores de RPG, escritores, worldbuilders, professores, criadores de conteúdo ou entusiastas de fantasia — registre suas próprias criaturas, incluindo informações como tipo, habitat, poderes e imagens obtidas automaticamente via API externa.
 
-Descrição: Sistema para cadastro de criaturas fantásticas, entradas de diário, autenticação de usuários e integração com APIs externas (Unsplash, OpenWeather).
+Além do catálogo de criaturas, o MonsterDex oferece também um módulo de Entradas de Diário, onde o usuário pode registrar encontros, eventos, aventuras ou observações relacionadas a cada criatura. Esses registros incluem clima do local (obtido automaticamente por API externa), data, descrição e outros detalhes narrativos ou investigativos.
 
-Branches:
-- main (entrega de datas e versão final)
-- develop (produção e integração das duas branchs backend e frontend)
-- backend (backend separado do front e totalmente focado na funcionalidade do código)
-- frontend (frontend separado do back e totalmente focado no design das páginas)
+Com autenticação segura, arquitetura profissional em camadas (MVC), banco de dados relacional e documentação REST completa, o sistema pode ser utilizado tanto como uma ferramenta pessoal quanto como apoio em campanhas de RPG, projetos literários, atividades educacionais, worldbuilding colaborativo ou até protótipos de jogos.
 
-ps: O README será alterado para uma versão final na entrega final em 29/11 após conclusão de todas as datas anteriores.
+---
+
+## 🚀 Tecnologias Utilizadas
+
+### **Backend**
+
+* Java 17
+* Spring Boot
+* Spring MVC
+* Spring Security
+* Spring Data JPA
+* Swagger / OpenAPI
+* OpenFeign ou RestTemplate
+
+### **Banco de Dados**
+
+* PostgreSQL (produção)
+
+### **Frontend**
+
+* Thymeleaf (monolito)
+
+---
+
+## 📌 Funcionalidades
+
+* Autenticação e autorização de usuários
+* CRUD de **Criaturas**
+* CRUD de **Entradas de Diário**
+* Associação entre criatura e entrada de diário
+* Integração com APIs externas:
+
+  * Imagens (Unsplash / Pixabay)
+  * Clima (OpenWeather / WeatherAPI)
+* Documentação dos endpoints (Swagger)
+
+---
+
+## ▶️ Como Executar
+
+### **Pré-requisitos**
+
+* Java 17+
+* Maven
+* PostgreSQL
+
+### **Clonar o repositório**
+
+```bash
+git clone https://github.com/<grupo>/monsterdex.git
+cd monsterdex
+```
+
+### **Executar a aplicação**
+
+```bash
+mvn spring-boot:run
+```
+
+### **Acessos**
+
+* Aplicação: **[http://localhost:8080](http://localhost:8080)**
+* Swagger: **[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)**
+
+---
+
+## 🗄️ Entidades Principais
+
+### **Usuário**
+
+Responsável por autenticação e permissões.
+
+### **Criatura**
+
+Possui:
+
+* nome
+* tipo
+* habitat
+* poderes
+* imagem vinda da API externa
+
+### **Entrada de Diário**
+
+Inclui:
+
+* descrição
+* data
+* localização
+* clima (via API externa)
+
+---
+
+## 🗓️ Cronograma da Disciplina
+
+| Entrega                          | Data           |
+| -------------------------------- | -------------- |
+| Repositório e membros            | **18/10/2025** |
+| Scaffold do projeto              | **25/10/2025** |
+| Rotas e funcionalidades iniciais | **01/11/2025** |
+| Banco + Autenticação             | **08/11/2025** |
+| Entrega final                    | **09/12/2025** |
+
+---
+
+## 👥 Integrantes do Grupo
+
+* Natalia dos Santos Gonçalves
+* Leonardo de Paula Trindade
+* Isabela de Paula Azevedo
 
