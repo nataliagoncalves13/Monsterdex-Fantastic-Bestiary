@@ -18,7 +18,7 @@ Com autenticação segura, arquitetura profissional em camadas (MVC), banco de d
 * Spring Security
 * Spring Data JPA
 * Swagger / OpenAPI
-* OpenFeign ou RestTemplate
+* RestTemplate
 
 ### **Banco de Dados**
 
@@ -38,8 +38,8 @@ Com autenticação segura, arquitetura profissional em camadas (MVC), banco de d
 * Associação entre criatura e entrada de diário
 * Integração com APIs externas:
 
-  * Imagens (Unsplash / Pixabay)
-  * Clima (OpenWeather / WeatherAPI)
+  * Imagens (Unsplash)
+  * Clima (OpenWeather) 
 * Documentação dos endpoints (Swagger)
 
 ---
